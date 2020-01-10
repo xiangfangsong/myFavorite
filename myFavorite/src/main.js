@@ -20,6 +20,6 @@ new Vue({
     render: h => h(App)
 }).$mount('#app');
 
-export default{ //后端地址
-    url: "http://167.179.78.178:9090"
+export default{ //后端地址，发布前要修改为后端服务器的IP地址
+    url: "http://127.0.0.1:9090"
 }
