@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="image" style="margin: 20px">
+</div>
+
+<!--    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>-->
+<script src="js/jquery-1.4.1.js" ></script>
+<!--    <script src="Scripts/jSignature/jSignature.min.js" type="text/javascript"></script>-->
+<!--处理版本低于IE9的浏览器，支持IE7、IE8,使用Flash实现-->
+<script src="js/flashcanvas.js" type="text/javascript"></script>
+<!--处理支持H5的浏览器,使用canvas,非压缩吧，去掉了其中的签字横线，可以使用jSignature.min.js 看看两者的区别-->
+<script src="js/jSignature.js" type="text/javascript"></script>
+<!--        <script>if (window.module) module = window.module;</script>-->
+<script type="text/javascript">
+    $(function () {
+        $("#signature").jSignature();
+        show();
+        // $(".jSignature").css({ "width": "100%", "height": "100%" });
+    });
+    function show() {
+        var searchUrl =window.location.href;
+        var searchData =searchUrl.split("=");        //截取 url中的“=”,获得“=”后面的参数
+        var  attachement =decodeURI(searchData[1]);
+        console.log(attachement)
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/ybprjprocessing/prjlisting/readfile",
+            data: {gid:attachement},
+            success: function (msg) {
+                var createImage = new Image();
+                createImage.src = msg;
+                $(createImage).appendTo($("#image"))
+            }
+        });
+    }
+    function jSignatureTest() {
+        var $sigdiv = $("#signature");
+        var datapair = $sigdiv.jSignature("getData", "image"); //设置输出的格式，具体可以参考官方文档
+
+        var i = new Image();
+        i.src = "data:" + datapair[0] + "," + datapair[1]
+        $(i).appendTo($("#image")) // append the image (SVG) to DOM.    $("#image")
+    }
+</script>
+</body>
+</html>
